@@ -37,3 +37,21 @@ st.write('''
 
 st.text('''You can use the small appliation to analyse your per day calories and 
 weight loss analysis''')
+
+
+st.subheader('Basal Metabolic Rate (BMR)')
+
+st.write('''
+The basal metabolic rate (BMR) is the amount of energy needed while resting in 
+a temperate environment when the digestive system is inactive. It is the 
+equivalent of figuring out how much gas an idle car consumes while parked. 
+In such a state, energy will be used only to maintain vital organs, which 
+include the heart, brain, kidneys, nervous system, intestines, liver, lungs, 
+sex organs, muscles, and skin.
+''')
+
+st.write('''
+\nMifflin-St Jeor Equation:\n
+\nFor men:  BMR = 10W + 6.25H - 5A + 5\n
+For women: BMR = 10W + 6.25H - 5A - 161
+''')

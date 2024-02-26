@@ -2,7 +2,7 @@ import streamlit as st
 import datetime
 import pandas as pd 
 import matplotlib.pyplot as plt
-
+st.subheader('Calculate BMI(Body Mass Index) \n\n')
 height = st.number_input("Enter your height in(cms): ", min_value=100)
 weight = st.number_input("Enter your weight in kgs: ", min_value=1)
 def bmi(height, weight):
@@ -39,7 +39,7 @@ st.write("Your BMI is "+str(person_bmi)+' kg/m2')
 st.write("You lies under the category of " + category(person_bmi))
 
 
-st.write('Get to know the BMR(Basal Metabolic Rate) details')
+st.subheader('\n\nCalculate BMR(Basal Metabolic Rate)\n\n')
 age = st.number_input("Enter your age: ")
 gender = st.text_input("Enter your gender Either('M' or 'F'): ")
 if gender == 'M':
