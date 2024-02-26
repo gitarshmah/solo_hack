@@ -1,67 +1,30 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import altair as alt
+import datetime
+import matplotlib.pyplot as plt 
+st.title(" Weight Loss Tracking")
+time  = datetime.datetime.now()
+person_bmr = st.number_input('Enter your BMR: ')
+weight = st.number_input('Enter your current weight: ')
+target_weight = st.number_input("Enter the target weight(Weight Loss): ", min_value=0.001)
+selected_value = st.slider('Calorie Deficit', min_value=500, max_value=int(person_bmr))
 
-
-np.random.seed(0)
-days = np.arange(1, 101)
-target_weight = int(st.number_input('target_weight',min_value=0.001))
-current_weight = int(st.number_input('current_weight',min_value=0.001))
-calorie_intake = np.random.randint(1800, 2500, size=100) 
-calorie_expenditure = np.random.randint(1600, 2200, size=100) 
-calorie_deficit = calorie_expenditure - calorie_intake
-
-weight_loss = np.cumsum(calorie_deficit) / 3500  
-goal_weight = current_weight - weight_loss
-
-data = pd.DataFrame({
-    'Days': days,
-    'Current Weight': current_weight - weight_loss,
-    'Goal Weight': target_weight,
-    'Calorie Deficit': calorie_deficit
-})
-
-st.title('Weight Loss Progress Visualization')
-
-days_slider, weight_slider = st.slider(
-    label="Adjust number of days and weight:",
-    min_value=min(days), max_value=max(days), value=(min(days), max(days)),
-    step=1
-), st.slider(
-    label="Adjust current weight:",
-    min_value=int(min(data['Current Weight'])),
-    max_value=int(max(data['Current Weight'])),
-    value=int(max(data['Current Weight'])),
-    step=1
-)
-
-filtered_data = data[(data['Days'] >= days_slider[0]) & (data['Days'] <= days_slider[1])]
-
-highlight = alt.selection(type='single', on='mouseover', fields=['Days'], nearest=True)
-
-line_chart = alt.Chart(filtered_data).mark_line().encode(
-    x='Current Weight',
-    y='Days',
-    color=alt.condition(highlight, alt.value('orange'), alt.value('steelblue')),
-    tooltip=['Days', 'Current Weight']
-).properties(
-    width=600,
-    height=400
-).add_selection(
-    highlight
-)
-
-
-scatter_plot = alt.Chart(filtered_data).mark_circle(size=60).encode(
-    x='Current Weight',
-    y='Days',
-    color=alt.condition(alt.datum['Calorie Deficit'] > 0, alt.value('red'), alt.value('green')),
-    tooltip=['Days', 'Current Weight', 'Calorie Deficit']
-)
-
-
-combined_chart = line_chart + scatter_plot
-
-
-st.altair_chart(combined_chart, use_container_width=True)
+       
+if st.button('Calculate'):
+         days_to_reach_target = (weight - target_weight) * 7700 / selected_value
+         dates = pd.date_range(start=pd.Timestamp.now(), periods=int(days_to_reach_target), freq='D')
+         weights = [weight - (selected_value / 7700 * i) for i in range(int(days_to_reach_target))]
+         df = pd.DataFrame({'Date': dates, 'Weight': weights})
+         exact_time  = ((df.iloc[-1])['Date']).strftime("%b %d, %Y")
+         st.line_chart(df.set_index('Date'))
+         plt.figure(figsize=(14, 6))
+         plt.plot(df['Date'], df['Weight'], marker='o', linestyle='-')
+         plt.title('Weight Loss Progress')
+         plt.xlabel('Date')
+         plt.ylabel('Weight (kg)')
+         plt.grid(True)
+         plt.xticks(rotation=45)
+         plt.tight_layout()
+         st.pyplot(plt)
+         st.write('You will reach the goal by ' + exact_time)

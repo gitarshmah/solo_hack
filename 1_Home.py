@@ -28,4 +28,12 @@ st.write('''\n\nThis is a graph of BMI categories based on the World Health Orga
 ''')
 st.image('https://d26tpo4cm8sb6k.cloudfront.net/img/bmi-chart.gif')
 
+st.subheader('BMI Formula')
+st.write('''
+     BMI in the International System of Units (SI)\n\n
+     \t\t\t BMI = Mass(Kg)/(Height(m)^2)
+''')
 
+
+st.text('''You can use the small appliation to analyse your per day calories and 
+weight loss analysis''')
